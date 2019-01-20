@@ -1,0 +1,30 @@
+{
+  "name": "kebab-ify",
+  "version": "1.0.0",
+  "description": "CLI utility to convert a JS project using PascalCase filenames to kebab-case filenames",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "kebab-case",
+    "javascript",
+    "cli",
+    "convert"
+  ],
+  "bin": {
+    "kebabify": "./cli.js",
+    "kebab-ify": "./cli.js"
+  },
+  "author": "Mike King",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "git-status": "^1.0.9",
+    "recursive-readdir": "^2.2.2"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "mkpath": "^1.0.0"
+  }
+}
