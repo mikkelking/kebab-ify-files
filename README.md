@@ -62,9 +62,34 @@ If you are not using git (I can't imagine why you would do that), then instead o
 ## Getting started
 
 ```
-npm install -g kebab-ify
+npm install -g kebab-ify  # Install globally, not to the project
 cd /path/to/your/project
-kekab-ify src
+git checkout -b kebab-ify  # Create a new branch for this activity
+kekab-ify src   # If no parameter specified, defaults to `src`
+```
+
+Review changes (eg with `git difftool`), make sure your tests still run...
+
+```
+git commit -am "Kebab-ify changes"
+git push --set-upstream origin kebab-ify
+```
+
+Create a Pull Request and use github to review the changes.
+
+### Logging
+
+A list of all the git commands issued will be saved in `git-rename-commands.sh` and a log file `kebab-ify.log` lists the file/folder renames, and the list of modified files. Once you are happy with the results, you can safely remove the files. Git will keep a record of all of the changes anyway.
+
+Here is a sample report:
+
+```
+Kebab-ification report
+File/folder renames:
+  * src/Components/ => src/components/
+  * src/Components/MyWidget => src/components/my-widget
+Files modified:
+  * src/components/my-widget/my-widget.js
 ```
 
 ## Running the tests

@@ -182,17 +182,21 @@ const pass1 = () => {
       // Now is the moment to report on what we did
       //
       const reportfile = 'kebab-ify.log'
-      const contents = `Kebabification report
-      File/folder renames:
-      ${
+      const contents = `Kebab-ification report
+File/folder renames:
+${
         Object.keys(paths).length
           ? Object.keys(paths)
-              .map(p => `${p} => ${paths[p]}`)
+              .map(p => `  * ${p} => ${paths[p]}`)
               .join('\n')
           : '(None)'
       }
-      Files modified:
-      ${fixedfiles.length ? `${fixedfiles.map(f => f).join('\n')}` : '(None)'}
+Files modified:
+${
+        fixedfiles.length
+          ? `${fixedfiles.map(f => `  * ${f}`).join('\n')}`
+          : '(None)'
+      }
       `
       fs.writeFileSync(reportfile, contents)
       console.log(chalk.bgGreen.black('  Done  '))

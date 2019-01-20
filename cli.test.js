@@ -7,18 +7,29 @@ const { execSync } = require('child_process')
 // base is defined as a location outside a git repo. Assumes I have write
 // access to .. :)
 const base = '../.kebab-ify-test'
-const contents = `
+const widgetContents = `
 //# 
 //# Test file
 //#
-import SomeThing from ('../../Component/SomeThing')
+import Avatar from '../../Components/Avatar'
+import SomeThing from '../../Components/SomeThing'
+import SomeThingElse from '../../components/SomeThingElse'
+//
+// The rest of the file isn't important
+//
+`
+const avatarContents = `
+//# 
+//# Avatar component test file
+//#
+import SomeThing from '../../components/SomeThing'
 //
 // The rest of the file isn't important
 //
 `
 
 afterAll(() => {
-  execSync(`rm -rf ${base}`)
+  // execSync(`rm -rf ${base}`)
 })
 
 //
@@ -29,7 +40,11 @@ if (fs.existsSync(base)) {
 }
 mkpath.sync(`${base}/src/Components/MyWidget`)
 const widgetsrc = `${base}/src/Components/MyWidget/MyWidget.js`
-fs.writeFileSync(widgetsrc, contents, {
+fs.writeFileSync(widgetsrc, widgetContents, {
+  encoding: 'utf8'
+})
+const avatarsrc = `${base}/src/Components/Avatar.js`
+fs.writeFileSync(avatarsrc, avatarContents, {
   encoding: 'utf8'
 })
 
