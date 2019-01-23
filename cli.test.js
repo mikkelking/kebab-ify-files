@@ -47,6 +47,10 @@ const avatarsrc = `${base}/src/Components/Avatar.js`;
 fs.writeFileSync(avatarsrc, avatarContents, {
   encoding: "utf8"
 });
+const setupTestsFile = `${base}/src/setupTests.ts`;
+fs.writeFileSync(setupTestsFile, "Contents not important", {
+  encoding: "utf8"
+});
 
 test("Files are set up", async () => {
   await expect(fs.existsSync(base)).toBeTruthy();
@@ -74,4 +78,8 @@ test("kebab-case files are there", () => {
   expect(
     fs.existsSync(`${base}/src/components/my-widget/my-widget.js`)
   ).toBeTruthy();
+});
+
+test("setupTests file is preserved", async () => {
+  await expect(fs.existsSync(setupTestsFile)).toBeTruthy();
 });

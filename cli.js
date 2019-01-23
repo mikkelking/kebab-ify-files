@@ -27,6 +27,7 @@ const ABORT = msg => {
   console.error(BANG + msg + "\n" + BANG);
   process.exit(1);
 };
+const skipThese = ["setupTests.*"];
 
 //
 // Main line starts here
@@ -85,7 +86,7 @@ gitStatus((err, data) => {
 });
 
 const pass1 = () => {
-  recursive(target, function(err, files) {
+  recursive(target, skipThese, function(err, files) {
     // `files` is an array of file paths
     files.forEach(filename => {
       const [path, file] = splitpath(filename);
@@ -157,7 +158,7 @@ const pass1 = () => {
     // Make another pass, modifying the imports statements in each file
     // according to the same renaming logic
     //
-    recursive(target, function(err, srcfiles) {
+    recursive(target, skipThese, function(err, srcfiles) {
       // `srcfiles` is an array of file paths
       srcfiles.forEach(f => {
         const lines = fs.readFileSync(f, "utf8").split(/\n/);
