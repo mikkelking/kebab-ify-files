@@ -140,7 +140,7 @@ const pass1 = () => {
         cmdfile,
         gitcommands
           .map(cmd => {
-            return opts.git ? `git $cmd` : cmd;
+            return opts.git ? `git ${cmd}` : cmd;
           })
           .join("\n"),
         {
@@ -189,18 +189,16 @@ const pass1 = () => {
       const contents = `Kebab-ification report
 File/folder renames:
 ${
-        Object.keys(paths).length
-          ? Object.keys(paths)
-              .map(p => `  * ${p} => ${paths[p]}`)
-              .join("\n")
-          : "(None)"
-      }
+  Object.keys(paths).length
+    ? Object.keys(paths)
+        .map(p => `  * ${p} => ${paths[p]}`)
+        .join("\n")
+    : "(None)"
+}
 Files modified:
 ${
-        fixedfiles.length
-          ? `${fixedfiles.map(f => `  * ${f}`).join("\n")}`
-          : "(None)"
-      }
+  fixedfiles.length ? `${fixedfiles.map(f => `  * ${f}`).join("\n")}` : "(None)"
+}
       `;
       fs.writeFileSync(reportfile, contents);
       console.log(chalk.bgGreen.black("  Done  "));
