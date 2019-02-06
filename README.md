@@ -1,4 +1,4 @@
-# Kebab-ify
+# Kebab-ify-files
 
 A Command line utility to change React project filenames from PascalCase to kebab-case
 
@@ -62,17 +62,16 @@ If you are not using git (I can't imagine why you would do that), then instead o
 ## Getting started
 
 ```
-npm install -g kebab-ify  # Install globally, not to the project
 cd /path/to/your/project
-git checkout -b kebab-ify  # Create a new branch for this activity
-kekab-ify src   # If no parameter specified, defaults to `src`
+git checkout -b kebab-ify-files  # Create a new branch for this activity
+npx kekab-ify-files src   # If no parameter specified, defaults to `src`
 ```
 
 Review changes (eg with `git difftool`), make sure your tests still run...
 
 ```
-git commit -am "Kebab-ify changes"
-git push --set-upstream origin kebab-ify
+git commit -am "Kebab-ify-files changes"
+git push --set-upstream origin kebab-ify-files
 ```
 
 Create a Pull Request and use github to review the changes.
