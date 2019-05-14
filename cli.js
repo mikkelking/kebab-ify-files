@@ -140,7 +140,7 @@ const pass1 = () => {
         cmdfile,
         gitcommands
           .map(cmd => {
-            return opts.git ? `git $cmd` : cmd;
+            return opts.git ? `git ${cmd}` : cmd;
           })
           .join("\n"),
         {
