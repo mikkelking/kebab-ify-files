@@ -8,7 +8,8 @@
     "url": "https://github.com/mikkelking/kebab-ify-files.git"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+	"publish": "npm publish --access=public"
   },
   "keywords": [
     "kebab-case",
