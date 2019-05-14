@@ -1,5 +1,5 @@
 {
-  "name": "kebab-ify",
+  "name": "kebab-ify-files",
   "version": "1.0.0",
   "description": "CLI utility to convert a JS project using PascalCase filenames to kebab-case filenames",
   "main": "index.js",
