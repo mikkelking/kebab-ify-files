@@ -1,8 +1,12 @@
 {
   "name": "kebab-ify-files",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI utility to convert a JS project using PascalCase filenames to kebab-case filenames",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikkelking/kebab-ify-files.git"
+  },
   "scripts": {
     "test": "jest"
   },
