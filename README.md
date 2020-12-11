@@ -64,7 +64,7 @@ If you are not using git (I can't imagine why you would do that), then instead o
 ```
 cd /path/to/your/project
 git checkout -b kebab-ify-files  # Create a new branch for this activity
-npx kekab-ify-files src   # If no parameter specified, defaults to `src`
+npx kebab-ify-files src   # If no parameter specified, defaults to `src`
 ```
 
 Review changes (eg with `git difftool`), make sure your tests still run...
