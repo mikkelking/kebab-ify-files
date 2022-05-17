@@ -42,7 +42,7 @@ const fixedfiles = []
 
 const gitcommands = ['#!/bin/bash']
 
-const reg = new RegExp(/from\s+['"](.*)['"]/)
+const reg = new RegExp(/(import\s+|from\s+|require\()['"](.*)['"]/)
 
 const [, , ...args] = process.argv
 const target = args[0] || 'src'
@@ -169,9 +169,9 @@ const pass1 = () => {
             let newline = line
             const m = line.match(reg)
             if (m) {
-              const newfile = camelCaseToKebab(m[1])
+              const newfile = camelCaseToKebab(m[2])
               if (m[1] !== newfile) {
-                newline = line.replace(reg, `from '${newfile}'`)
+                newline = line.replace(reg, `${m[1]}'${newfile}'`)
                 dirty = true
               }
             }
