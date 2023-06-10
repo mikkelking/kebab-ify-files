@@ -1,51 +1,52 @@
 #!/usr/bin/env node
 
-const recursive = require('recursive-readdir')
-const chalk = require('chalk')
-const gitStatus = require('git-status')
-const fs = require('fs')
-const { execFileSync } = require('child_process')
+const recursive = require("recursive-readdir")
+const chalk = require("chalk")
+const gitStatus = require("git-status")
+const fs = require("fs")
+const { execFileSync } = require("child_process")
+const debug = require("debug")("app:kebab-ify")
 
-const camelCaseToKebab = myStr => {
-  newStr = myStr.replace(/\s+/g, '-') // Replace spaces because we don't like them
-  return newStr.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+const camelCaseToKebab = (myStr) => {
+  newStr = myStr.replace(/\s+/g, "-") // Replace spaces because we don't like them
+  return newStr.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
 }
 
-const splitpath = filepath => {
+const splitpath = (filepath) => {
   const parts = filepath.split(/\//)
   const file = parts.pop()
-  const path = parts.join('/')
+  const path = parts.join("/")
   return [path, file]
 }
 
-const fixpath = p => {
+const fixpath = (p) => {
   const [path, file] = splitpath(p)
   return `${path.toLowerCase()}/${file}`
 }
 
-const ABORT = msg => {
-  const BANG = '\n * * * * * * * FAILED * * * * * * * * *\n\n'
-  console.error(BANG + msg + '\n' + BANG)
+const ABORT = (msg) => {
+  const BANG = "\n * * * * * * * FAILED * * * * * * * * *\n\n"
+  console.error(BANG + msg + "\n" + BANG)
   process.exit(1)
 }
-const skipThese = ['setupTests.*']
+const skipThese = ["setupTests.*"]
 
 //
 // Main line starts here
 //
 const paths = {}
 const opts = {
-  git: true
+  git: true,
 }
 const fixedfiles = []
 // Path renames we did already
 
-const gitcommands = ['#!/bin/bash']
+const gitcommands = ["#!/bin/bash"]
 
 const reg = new RegExp(/from\s+['"](.*)['"]/)
 
 const [, , ...args] = process.argv
-const target = args[0] || 'src'
+const target = args[0] || "src"
 if (!fs.existsSync(target)) {
   console.error(
     `Directory ${chalk.bgRed.yellow.underline(target)} does not exist`
@@ -67,19 +68,19 @@ gitStatus((err, data) => {
   // [ { x: ' ', y: 'M', to: 'example/index.js', from: null } ]
   const dirty = []
   if (data) {
-    data.forEach(row => {
-      if (row.from || row.y === 'M') {
+    data.forEach((row) => {
+      if (row.from || row.y === "M") {
         dirty.push(row.to)
       }
     })
   }
   if (dirty.length) {
     ABORT(
-      'Git is showing ' +
+      "Git is showing " +
         dirty.length +
-        ' dirty files, (' +
-        dirty.join(', ') +
-        ') please fix and retry'
+        " dirty files, (" +
+        dirty.join(", ") +
+        ") please fix and retry"
     )
   }
   // Good to go...
@@ -87,17 +88,18 @@ gitStatus((err, data) => {
 })
 
 const pass1 = () => {
-  recursive(target, skipThese, function(err, files) {
+  recursive(target, skipThese, function (err, files) {
     // `files` is an array of file paths
-    files.forEach(filename => {
+    debug({ files })
+    files.forEach((filename) => {
       const [path, file] = splitpath(filename)
-      const dirs = path.split('/')
+      const dirs = path.split("/")
       dirs.pop() // Lose the last one
-      let tp = ''
-      dirs.forEach(dir => {
+      let tp = ""
+      dirs.forEach((dir) => {
         tp = `${tp}${dir}/`
         if (dir.match(/[A-Z]/)) {
-          const trimtp = tp.replace(/\/$/, '')
+          const trimtp = tp.replace(/\/$/, "")
           if (!paths[trimtp]) {
             paths[trimtp] = trimtp.toLowerCase()
             gitcommands.push(`mv '${trimtp}' '${trimtp.toLowerCase()}'`)
@@ -140,18 +142,18 @@ const pass1 = () => {
       fs.writeFileSync(
         cmdfile,
         gitcommands
-          .map(cmd => {
+          .map((cmd) => {
             return opts.git ? `git ${cmd}` : cmd
           })
-          .join('\n'),
+          .join("\n"),
         {
-          encoding: 'utf8',
-          mode: 0o766
+          encoding: "utf8",
+          mode: 0o766,
         }
       )
       const res = execFileSync(cmdfile, { cwd: process.cwd() })
     } else {
-      console.error('No files or folders to rename')
+      console.error("No files or folders to rename")
       process.exit(1)
     }
 
@@ -159,13 +161,13 @@ const pass1 = () => {
     // Make another pass, modifying the imports statements in each file
     // according to the same renaming logic
     //
-    recursive(target, skipThese, function(err, srcfiles) {
+    recursive(target, skipThese, function (err, srcfiles) {
       // `srcfiles` is an array of file paths
-      srcfiles.forEach(f => {
-        const lines = fs.readFileSync(f, 'utf8').split(/\n/)
+      srcfiles.forEach((f) => {
+        const lines = fs.readFileSync(f, "utf8").split(/\n/)
         let dirty = false
         const newbuf = lines
-          .map(line => {
+          .map((line) => {
             let newline = line
             const m = line.match(reg)
             if (m) {
@@ -177,7 +179,7 @@ const pass1 = () => {
             }
             return newline
           })
-          .join('\n')
+          .join("\n")
         if (dirty) {
           fixedfiles.push(f)
           fs.writeFileSync(f, newbuf)
@@ -186,23 +188,25 @@ const pass1 = () => {
       //
       // Now is the moment to report on what we did
       //
-      const reportfile = 'kebab-ify.log'
+      const reportfile = "kebab-ify.log"
       const contents = `Kebab-ification report
 File/folder renames:
 ${
   Object.keys(paths).length
     ? Object.keys(paths)
-        .map(p => `  * ${p} => ${paths[p]}`)
-        .join('\n')
-    : '(None)'
+        .map((p) => `  * ${p} => ${paths[p]}`)
+        .join("\n")
+    : "(None)"
 }
 Files modified:
 ${
-  fixedfiles.length ? `${fixedfiles.map(f => `  * ${f}`).join('\n')}` : '(None)'
+  fixedfiles.length
+    ? `${fixedfiles.map((f) => `  * ${f}`).join("\n")}`
+    : "(None)"
 }
       `
       fs.writeFileSync(reportfile, contents)
-      console.log(chalk.bgGreen.black('  Done  '))
+      console.log(chalk.bgGreen.black("  Done  "))
     })
   })
 }
