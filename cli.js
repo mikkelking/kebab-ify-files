@@ -143,6 +143,9 @@ const pass1 = () => {
         cmdfile,
         gitcommands
           .map((cmd) => {
+            if(cmd.startsWith("#!/")) {
+              return cmd
+            }
             return opts.git ? `git ${cmd}` : cmd
           })
           .join("\n"),
